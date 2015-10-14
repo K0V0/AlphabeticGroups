@@ -120,7 +120,7 @@ Class AlphabetGrouper {
 	}
 
 	public function set_captions_type($type) {
-		$this->set_var($type, "captionsType", 2);
+		$this->set_var($type, "captionsType", 3);
 	}
 
     public function sort_az($array=false, $keys=false) {
@@ -238,6 +238,7 @@ Class AlphabetGrouper {
     	// fuill up the groups array with sorted items
     	$k=0;
     	$arr = Array();
+    	$itms = 0;
 		for ($i=0; $i<$this->limit; $i++) {
 			if ($type == 1) {
 				$itms = ($i < $this->groupingCalcs['remainder']) ? $this->groupingCalcs['items_per_column_no_remainder'] + 1 : $this->groupingCalcs['items_per_column_no_remainder'];
@@ -261,13 +262,12 @@ Class AlphabetGrouper {
     	$this->groupingCalcs['items'] = sizeof($this->sortedArray);
 		if ($this->groupingCalcs['items'] % $this->limit == 0) {
 			$this->groupingCalcs['items_per_column'] = $this->groupingCalcs['items'] / $this->limit;
+			$this->groupingCalcs['items_per_column_no_remainder'] = $this->groupingCalcs['items_per_column'];
+			$this->groupingCalcs['remainder'] = 0;
 		} else {
 			$this->groupingCalcs['remainder'] = $this->groupingCalcs['items'] % $this->limit;
 			$this->groupingCalcs['items_per_column_no_remainder'] = ($this->groupingCalcs['items'] - $this->groupingCalcs['remainder']) / $this->limit;
 			$this->groupingCalcs['items_per_column'] = (($this->groupingCalcs['items'] - $this->groupingCalcs['remainder']) / $this->limit) + 1;
-			$this->groupingCalcs['num_of_full_columns'] = $this->limit - 1;
-			$this->groupingCalcs['items_per_full_columns'] = $this->groupingCalcs['num_of_full_columns'] * $this->groupingCalcs['items_per_column'];
-			$this->groupingCalcs['items_per_last_column'] = $this->groupingCalcs['items'] % $this->groupingCalcs['items_per_full_columns'];
 		}
     }
 
@@ -322,7 +322,7 @@ Class AlphabetGrouper {
     private function set_var($val, $var, $maxRange) {
     	// function for sanitizing input from set methods, trying to do DRY practice
 		if (( $val === NULL )||( $val === false )) {
-			if ($this->groupingType === 0) { $this->{$var} = 1; }
+			if ($this->{$var} === 0) { $this->{$var} = 1; }
 		} else if (!is_int($val)) {
 			throw new InvalidArgumentException($var . ' parameter can be only integer. ' . gettype($val) . ' given instead');
 		} else if ((is_int($val))&&(($val > $maxRange)&&($val < 1))) {
