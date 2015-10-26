@@ -203,7 +203,7 @@ Class AlphabetGrouper {
 				// example: A-Ba, Bb-D, F-G
     			$nextChar = ($match !== NULL) ? strlen($match) : 0;
     			$current_first = strtoupper($array[$i] [0] [$this->keys] [$nextChar]);
-    			$previous_last = strtoupper($array[($i-1)] [(sizeof(($array[$i-1]))-1)] [$this->keys] [$nextChar]);
+    			$previous_last = ($i > 0) ? strtoupper($array[($i-1)] [(sizeof(($array[$i-1]))-1)] [$this->keys] [$nextChar]) : "";
 
     			if ($current_first == $previous_last) {
     				$match .= $current_first;
